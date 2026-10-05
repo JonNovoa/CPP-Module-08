@@ -1,0 +1,288 @@
+# CPP08 — ex00 — Easy Find
+
+## OBJETIVO
+
+Crear una función template llamada `easyfind` que busque un número entero dentro de un container.
+
+Debe encontrar la **primera aparición** del número.
+
+Si no encuentra el número, debe lanzar una excepción o devolver un error.
+
+---
+
+## ARCHIVOS
+
+```text
+ex00/
+├── Makefile
+├── main.cpp
+└── easyfind.hpp
+```
+
+---
+
+## easyfind.hpp
+
+Creamos la función:
+
+```cpp
+template <typename T>
+typename T::const_iterator easyfind(const T &container, int value);
+```
+
+### `T`
+
+`T` representa el tipo de container que recibimos.
+
+Por ejemplo:
+
+```cpp
+std::vector<int>
+```
+
+Cuando hacemos:
+
+```cpp
+easyfind(numbers, 20);
+```
+
+y `numbers` es un `std::vector<int>`:
+
+```text
+T = std::vector<int>
+```
+
+Por eso:
+
+```cpp
+T::const_iterator
+```
+
+se convierte en:
+
+```cpp
+std::vector<int>::const_iterator
+```
+
+---
+
+## std::find()
+
+Utilizamos el algoritmo de STL:
+
+```cpp
+std::find()
+```
+
+Está incluido en:
+
+```cpp
+#include <algorithm>
+```
+
+Lo utilizamos para buscar el número:
+
+```cpp
+std::find(container.begin(), container.end(), value);
+```
+
+Significa:
+
+> Buscar `value` desde el principio hasta el final del container.
+
+---
+
+## ITERADOR
+
+`std::find()` devuelve un iterador.
+
+Por ejemplo:
+
+```text
+10  20  30  20  40
+     ↑
+     |
+     iterador
+```
+
+Si buscamos `20`, devuelve el iterador que apunta al **primer `20`**.
+
+Podemos obtener el valor utilizando:
+
+```cpp
+*it
+```
+
+---
+
+## SI NO ENCUENTRA EL VALOR
+
+`std::find()` devuelve:
+
+```cpp
+container.end()
+```
+
+cuando no encuentra el elemento.
+
+Por eso comprobamos:
+
+```cpp
+if (it == container.end())
+    throw std::runtime_error("Value not found");
+```
+
+Entonces se lanza una excepción.
+
+---
+
+# main.cpp
+
+Creamos un `std::vector<int>`:
+
+```cpp
+std::vector<int> numbers;
+```
+
+Y añadimos:
+
+```text
+10
+20
+30
+20
+40
+```
+
+Después hacemos dos pruebas.
+
+---
+
+## PRIMERA PRUEBA
+
+Buscamos:
+
+```cpp
+easyfind(numbers, 20);
+```
+
+Hay dos `20`, pero `std::find()` devuelve el primero.
+
+Resultado:
+
+```text
+Encontrado: 20
+```
+
+---
+
+## SEGUNDA PRUEBA
+
+Buscamos:
+
+```cpp
+easyfind(numbers, 50);
+```
+
+`50` no existe.
+
+Se lanza una excepción:
+
+```text
+Exception: Value not found
+```
+
+---
+
+# STL UTILIZADA
+
+En este ejercicio utilizamos:
+
+### `std::vector`
+
+Container que almacena elementos.
+
+```cpp
+std::vector<int>
+```
+
+### `std::find`
+
+Algoritmo de STL que busca un elemento dentro de un rango.
+
+```cpp
+std::find(begin, end, value)
+```
+
+### `const_iterator`
+
+Iterador que permite recorrer y leer los elementos sin modificarlos.
+
+---
+
+# CONCEPTOS IMPORTANTES
+
+* **Template** → permite trabajar con diferentes tipos de containers.
+* **STL** → utilizamos los containers y algoritmos estándar de C++.
+* **`std::vector`** → container utilizado en nuestras pruebas.
+* **`std::find`** → busca el elemento.
+* **Iterator** → indica dónde está el elemento encontrado.
+* **`end()`** → indica que no se ha encontrado.
+* **Excepción** → controla cuando el elemento no existe.
+* **Primera aparición** → `std::find` se detiene en el primer elemento encontrado.
+
+---
+
+# COMPILACIÓN
+
+```bash
+make
+```
+
+Ejecutar:
+
+```bash
+./easyfind
+```
+
+Limpiar:
+
+```bash
+make clean
+```
+
+Eliminar también el ejecutable:
+
+```bash
+make fclean
+```
+
+Recompilar:
+
+```bash
+make re
+```
+
+---
+
+# RESUMEN
+
+```text
+Container
+    ↓
+std::find()
+    ↓
+¿Encuentra el número?
+    ↓
+ ┌──────────┐
+ │          │
+ SÍ        NO
+ │          │
+ ↓          ↓
+iterador   excepción
+ │
+ ↓
+primera aparición
+```
+
+**Este ejercicio consiste en aprender a combinar templates con los containers y algoritmos de la STL.**
