@@ -1,0 +1,291 @@
+# CPP08 - Templated containers, iterators, algorithms
+
+## Objetivo del módulo
+
+Aprender a utilizar **STL (Standard Template Library)**, especialmente:
+
+* Containers.
+* Iteradores.
+* Algoritmos.
+* Templates junto con containers.
+
+A diferencia de CPP07, en este módulo empezamos a utilizar los containers y algoritmos de la STL.
+
+---
+
+# ex00 - Easyfind
+
+## Objetivo
+
+Crear una función template que busque un número dentro de un container de enteros.
+
+Utilizamos:
+
+```cpp
+std::find()
+```
+
+La función devuelve un iterador al primer elemento encontrado.
+
+Si no encuentra el número, lanzamos una excepción.
+
+### Conceptos aprendidos
+
+* Templates.
+* Containers STL.
+* Iteradores.
+* `std::find()`.
+* Excepciones.
+
+### Idea principal
+
+```text
+Container + número
+       ↓
+   std::find()
+       ↓
+Iterador al elemento
+```
+
+---
+
+# ex01 - Span
+
+## Objetivo
+
+Crear una clase que almacene una cantidad limitada de números y permita calcular:
+
+* `shortestSpan()` → distancia más pequeña.
+* `longestSpan()` → distancia más grande.
+
+Utilizamos:
+
+```cpp
+std::vector<int>
+```
+
+para almacenar los números.
+
+Para encontrar el `shortestSpan` utilizamos:
+
+```cpp
+std::sort()
+```
+
+### `addNumber()`
+
+Añade un número individual.
+
+### `addRange()`
+
+Permite añadir muchos números mediante un rango de iteradores.
+
+Ejemplo:
+
+```cpp
+big.addRange(numbers.begin(), numbers.end());
+```
+
+### Conceptos aprendidos
+
+* `std::vector`.
+* `std::sort`.
+* Iteradores.
+* Templates.
+* Excepciones.
+* Rangos de iteradores.
+
+### Idea principal
+
+```text
+Números
+   ↓
+std::vector
+   ↓
+std::sort
+   ↓
+calcular spans
+```
+
+---
+
+# ex02 - MutantStack
+
+## Objetivo
+
+Crear una clase basada en `std::stack` que permita utilizar iteradores.
+
+El problema es que `std::stack` permite:
+
+```text
+push()
+pop()
+top()
+size()
+```
+
+pero no permite recorrer directamente sus elementos mediante iteradores.
+
+Creamos:
+
+```cpp
+MutantStack
+```
+
+que hereda de:
+
+```cpp
+std::stack
+```
+
+y añade:
+
+```cpp
+begin()
+end()
+```
+
+### Conceptos aprendidos
+
+* `std::stack`.
+* Herencia.
+* Iteradores.
+* `typedef`.
+* Container interno de un container adaptador.
+* `begin()` y `end()`.
+
+### Idea principal
+
+```text
+std::stack
+    +
+begin()
+end()
+    ↓
+MutantStack
+```
+
+---
+
+# STL utilizada
+
+Durante CPP08 hemos utilizado principalmente:
+
+```text
+std::vector
+std::stack
+std::list
+```
+
+Y algoritmos como:
+
+```text
+std::find
+std::sort
+```
+
+---
+
+# Iteradores
+
+Los iteradores permiten recorrer los elementos de un container.
+
+Normalmente utilizamos:
+
+```cpp
+container.begin()
+container.end()
+```
+
+Ejemplo:
+
+```cpp
+std::vector<int>::iterator it = numbers.begin();
+
+while (it != numbers.end())
+{
+    std::cout << *it << std::endl;
+    ++it;
+}
+```
+
+`begin()` apunta al primer elemento.
+
+`end()` apunta justo después del último elemento.
+
+---
+
+# Conceptos importantes del módulo
+
+## Containers
+
+Son estructuras que almacenan datos.
+
+Ejemplos:
+
+```text
+vector
+list
+stack
+```
+
+## Algoritmos
+
+Son funciones de la STL que trabajan sobre containers mediante iteradores.
+
+Ejemplos:
+
+```text
+std::find
+std::sort
+```
+
+## Iteradores
+
+Permiten recorrer los elementos de un container sin tener que acceder directamente a su estructura interna.
+
+---
+
+# Diferencia con CPP07
+
+En CPP07 aprendimos principalmente:
+
+```text
+Templates
+```
+
+En CPP08 utilizamos esos templates junto con:
+
+```text
+Templates
++
+Containers
++
+Iteradores
++
+Algoritmos
+```
+
+---
+
+# Resumen final
+
+```text
+CPP08
+│
+├── ex00 → buscar elementos
+│           std::find
+│           iteradores
+│
+├── ex01 → calcular distancias
+│           std::vector
+│           std::sort
+│           iteradores
+│
+└── ex02 → stack iterable
+            std::stack
+            herencia
+            iteradores
+```
+
+**CPP08 consiste principalmente en aprender a utilizar los containers de la STL junto con iteradores y algoritmos para trabajar con sus elementos.**
