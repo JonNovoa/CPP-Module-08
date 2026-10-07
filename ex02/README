@@ -1,0 +1,214 @@
+# CPP08 - ex02 - MutantStack
+
+## Objetivo
+
+Crear una clase `MutantStack` basada en `std::stack` que tenga todas sus funciones y además permita recorrer sus elementos mediante iteradores.
+
+El problema es que `std::stack` no permite utilizar iteradores directamente.
+
+---
+
+## Archivos
+
+```text
+ex02/
+├── Makefile
+├── main.cpp
+└── MutantStack.hpp
+```
+
+---
+
+## Herencia de std::stack
+
+`MutantStack` hereda de `std::stack`:
+
+```cpp
+template <typename T>
+class MutantStack : public std::stack<T>
+```
+
+Gracias a esto, `MutantStack` tiene las funciones normales de un `std::stack`, como:
+
+```text
+push()
+pop()
+top()
+size()
+```
+
+---
+
+## Iterator
+
+Creamos un alias para el iterador del container interno del `stack`:
+
+```cpp
+typedef typename std::stack<T>::container_type::iterator iterator;
+```
+
+Esto permite utilizar:
+
+```cpp
+MutantStack<int>::iterator
+```
+
+en lugar de escribir toda la definición del iterador.
+
+---
+
+## begin() y end()
+
+Añadimos las dos funciones que necesita nuestro `MutantStack`:
+
+```cpp
+iterator begin();
+iterator end();
+```
+
+`begin()` devuelve el primer elemento y `end()` indica el final del container.
+
+Gracias a ellas podemos recorrer el `MutantStack`:
+
+```cpp
+MutantStack<int>::iterator it = mstack.begin();
+MutantStack<int>::iterator ite = mstack.end();
+
+while (it != ite)
+{
+    std::cout << *it << std::endl;
+    ++it;
+}
+```
+
+---
+
+## Container interno
+
+`std::stack` utiliza internamente otro container para almacenar sus elementos.
+
+Por defecto utiliza `std::deque`.
+
+Por eso podemos acceder a su container interno mediante:
+
+```cpp
+this->c
+```
+
+Y obtener sus iteradores:
+
+```cpp
+this->c.begin();
+this->c.end();
+```
+
+---
+
+## Pruebas realizadas
+
+El `main` comprueba:
+
+1. `push()`
+2. `pop()`
+3. `top()`
+4. `size()`
+5. Recorrido mediante iteradores.
+6. Creación de un `std::stack` a partir del `MutantStack`.
+7. Comparación del recorrido con un `std::list`.
+
+---
+
+## MutantStack vs list
+
+Utilizamos también una `std::list` para comprobar que el recorrido produce los mismos valores.
+
+```text
+MutantStack:
+5
+3
+5
+737
+0
+
+List:
+5
+17
+3
+5
+737
+0
+```
+
+La `list` conserva el `17` porque no hemos hecho `pop()` sobre ella.
+
+El `MutantStack` sí hizo `pop()` anteriormente, por eso no aparece el `17`.
+
+---
+
+## Conceptos importantes
+
+### `std::stack`
+
+Container adaptador que permite trabajar principalmente con:
+
+```text
+push()
+pop()
+top()
+```
+
+pero no proporciona iteradores.
+
+### `MutantStack`
+
+Nuestro `std::stack` modificado para añadir:
+
+```text
+begin()
+end()
+```
+
+y poder recorrer sus elementos.
+
+### `typedef`
+
+Permite crear un alias para un tipo:
+
+```cpp
+typedef typename std::stack<T>::container_type::iterator iterator;
+```
+
+En este caso, llamamos simplemente `iterator` al iterador del container interno.
+
+---
+
+## Compilación
+
+```bash
+make
+./mutantstack
+```
+
+Para limpiar:
+
+```bash
+make clean
+```
+
+Para borrar también el ejecutable:
+
+```bash
+make fclean
+```
+
+Para recompilar desde cero:
+
+```bash
+make re
+```
+
+---
+
+## Resumen del ejercicio
+
+**Crear un `std::stack` modificado que mantenga todas sus funciones y además permita recorrer sus elementos mediante iteradores.**
