@@ -1,0 +1,197 @@
+# CPP08 - ex01 - Span
+
+## Objetivo
+
+Crear una clase `Span` que almacene una cantidad limitada de números enteros y permita calcular:
+
+* La distancia más pequeña entre dos números.
+* La distancia más grande entre dos números.
+
+También debemos poder añadir números de uno en uno o varios mediante un rango de iteradores.
+
+---
+
+## Archivos
+
+```text
+ex01/
+├── Makefile
+├── main.cpp
+├── Span.hpp
+└── Span.cpp
+```
+
+---
+
+## Clase Span
+
+```cpp
+Span sp(5);
+```
+
+El `5` indica que el `Span` puede almacenar como máximo 5 números.
+
+Los números se guardan en:
+
+```cpp
+std::vector<int> _numbers;
+```
+
+Y `_maxSize` guarda el número máximo de elementos permitidos.
+
+---
+
+## addNumber
+
+Añade un número al `Span`.
+
+```cpp
+sp.addNumber(5);
+```
+
+Antes de añadirlo comprobamos que no esté lleno.
+
+Si ya hemos llegado al máximo, lanzamos una excepción.
+
+---
+
+## addRange
+
+Permite añadir muchos números de una vez.
+
+```cpp
+big.addRange(numbers.begin(), numbers.end());
+```
+
+`begin()` indica dónde empieza el rango y `end()` dónde termina.
+
+La función recorre el rango y utiliza `addNumber()` para añadir cada número.
+
+Como `addRange` es un template, su implementación está directamente en `Span.hpp`.
+
+---
+
+## shortestSpan
+
+Devuelve la distancia más pequeña entre dos números.
+
+Primero comprobamos que haya al menos 2 números.
+
+Después hacemos una copia del vector y la ordenamos:
+
+```cpp
+std::vector<int> sorted = _numbers;
+std::sort(sorted.begin(), sorted.end());
+```
+
+Al estar ordenados, podemos comparar números consecutivos para encontrar la distancia más pequeña.
+
+Ejemplo:
+
+```text
+3 5 9 11 17
+
+5 - 3 = 2
+9 - 5 = 4
+11 - 9 = 2
+17 - 11 = 6
+```
+
+Por tanto:
+
+```text
+shortestSpan = 2
+```
+
+---
+
+## longestSpan
+
+La distancia más grande siempre será:
+
+```text
+número más grande - número más pequeño
+```
+
+Por eso ordenamos una copia y hacemos:
+
+```cpp
+sorted.back() - sorted.front()
+```
+
+---
+
+## Excepciones
+
+Si intentamos añadir más números de los permitidos:
+
+```cpp
+sp.addNumber(42);
+```
+
+se lanza una excepción.
+
+También se lanza una excepción si intentamos calcular un `Span` teniendo menos de 2 números.
+
+---
+
+## STL utilizada
+
+En este ejercicio utilizamos:
+
+* `std::vector` → para almacenar los números.
+* `std::sort` → para ordenar los números.
+* Iteradores → para recorrer el `vector`.
+* Templates → para `addRange`.
+
+---
+
+## Pruebas realizadas
+
+El `main` prueba:
+
+1. El ejemplo del enunciado.
+2. Intentar añadir un número cuando el `Span` está lleno.
+3. Calcular el `shortestSpan` con un solo número.
+4. Añadir 10.000 números mediante `addRange`.
+5. Calcular `shortestSpan` y `longestSpan` con 10.000 números.
+
+Con los números del `0` al `9999`:
+
+```text
+Shortest span: 1
+Longest span: 9999
+```
+
+---
+
+## Compilación
+
+```bash
+make
+./span
+```
+
+Para limpiar:
+
+```bash
+make clean
+```
+
+Para borrar también el ejecutable:
+
+```bash
+make fclean
+```
+
+Para recompilar desde cero:
+
+```bash
+make re
+```
+
+---
+
+## Resumen del ejercicio
+
+**`Span` guarda un número limitado de enteros y calcula la distancia más pequeña y más grande entre ellos utilizando STL.**
